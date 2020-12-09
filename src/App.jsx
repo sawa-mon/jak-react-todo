@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { InputTodo } from "./components/InputTodo";
+import { IncompleteTodos } from "./components/IncompleteTodos";
+import { CompleteTodos } from "./components/CompleteTodos";
 
 export const App = () => {
   const [todoText, setTodoText] = useState("");
@@ -47,32 +49,19 @@ export const App = () => {
         todoText={todoText}
         onChange={onChangeTodoText}
         onClick={onClickAdd}
+        disabled={incompleteTodo.length >= 5}
       />
-      <div>
-        <p>未完了のTodo</p>
-        <ul>
-          {incompleteTodo.map((todo, index) => {
-            return (
-              <div key={todo}>
-                <li>{todo}</li>
-                <button onClick={() => onClickComplete(index)}>完了</button>
-                <button onClick={() => onClickDelete(index)}>削除</button>
-              </div>
-            );
-          })}
-        </ul>
-        <p>完了のTodo</p>
-        <ul>
-          {completeTodo.map((todo, index) => {
-            return (
-              <div key={todo}>
-                <li>{todo}</li>
-                <button onClick={() => onClickReturn(index)}>戻す</button>
-              </div>
-            );
-          })}
-        </ul>
-      </div>
+      {incompleteTodo.length >= 5 && (
+        <p style={{ color: "red" }}>
+          登録できるToDoは５個までだ！タスクを消化しろ！
+        </p>
+      )}
+      <IncompleteTodos
+        incompleteTodo={incompleteTodo}
+        onClickDelete={onClickDelete}
+        onClickComplete={onClickComplete}
+      />
+      <CompleteTodos completeTodo={completeTodo} onClick={onClickReturn} />
     </>
   );
 };
